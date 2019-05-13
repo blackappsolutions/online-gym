@@ -8,4 +8,4 @@ Angular app with an upload form.
 Spring Boot app that consumes the uploaded files.
 
 ## _c14n
-dockerized setup of the two apps above.
+Dockerized setup of the two apps above.
