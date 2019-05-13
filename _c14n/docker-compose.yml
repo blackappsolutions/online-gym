@@ -15,7 +15,7 @@ services:
     image: movement-fitness-frontend:latest
     container_name: my-movement-fitness-frontend
     build:
-      context: ../../frontend
+      context: ../frontend
     networks:
       - frontend
     ports:
@@ -27,7 +27,9 @@ services:
     image: movement-fitness-backend:latest
     container_name: my-movement-fitness-backend
     build:
-      context: ../../backend
+      context: ../backend
+      args:
+        JAR_FILE: ./target/movement-fitness-backend-0.1.0.jar
     networks:
       - backend
       - frontend
