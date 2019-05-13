@@ -28,6 +28,8 @@ services:
     container_name: my-movement-fitness-backend
     build:
       context: ../backend
+      args:
+        JAR_FILE: ./target/movement-fitness-backend-0.1.0.jar
     networks:
       - backend
       - frontend
