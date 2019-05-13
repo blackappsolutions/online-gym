@@ -1,0 +1,12 @@
+# Intellij
+.idea/
+*.iml
+
+# Mac
+.DS_Store
+
+# Maven
+target/
+
+# Backend-App
+upload-dir

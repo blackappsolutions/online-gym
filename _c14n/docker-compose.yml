@@ -1,0 +1,82 @@
+version: "3.4"
+
+# https://hellokoding.com/docker-compose-with-spring-boot-mysql-nginx/
+
+#x-logging:
+#  &default-logging
+#  options:
+#    max-size: '12m'
+#    max-file: '5'
+#  driver: json-file
+
+services:
+
+  angular:
+    image: movement-fitness-frontend:latest
+    container_name: my-movement-fitness-frontend
+    build:
+      context: ../../frontend
+    networks:
+      - frontend
+    ports:
+      - '3000:80'
+    depends_on:
+      - springapi
+
+  springapi:
+    image: movement-fitness-backend:latest
+    container_name: my-movement-fitness-backend
+    build:
+      context: ../../backend
+    networks:
+      - backend
+      - frontend
+    ports:
+      - '8080:8080'
+
+#  mysql:
+#    image: ${REPOSITORY_PREFIX:-blackapp}/mysql
+#    container_name: mysql
+#    build:
+#      context: ../mysql
+#    volumes:
+#      # -v /opt/coremedia9/mysql-data:/var/lib/mysql
+#      - db-data:/var/lib/mysql
+#    networks:
+#      - backend
+#    restart: always
+#    logging: *default-logging
+#
+#  traefik:
+#    image: ${REPOSITORY_PREFIX:-blackapp}/traefik
+#    container_name: traefik
+#    build:
+#      context: ../traefik
+#    restart: always
+#    networks:
+#      - web
+#      - backend
+#    ports:
+#      - '80:80'
+#      - '443:443'
+#    labels:
+#      traefik.backend: traefik
+#      traefik.enable: "true"
+#      traefik.port: "8080"
+#      traefik.frontend.entryPoints: http,https
+#      traefik.frontend.headers.SSLRedirect: "true"
+#      traefik.frontend.rule: Host:monitor.${ENVIRONMENT_FQDN:-docker.localhost}
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#    environment:
+#      ENVIRONMENT_FQDN: ${ENVIRONMENT_FQDN:-docker.localhost}
+#    logging: *default-logging
+#
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge
+
+#volumes:
+#  db-data: {}
