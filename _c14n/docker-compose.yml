@@ -1,19 +1,28 @@
-version: "3.4"
+version: "3.5"
 
 # https://hellokoding.com/docker-compose-with-spring-boot-mysql-nginx/
 
-#x-logging:
-#  &default-logging
-#  options:
-#    max-size: '12m'
-#    max-file: '5'
-#  driver: json-file
+x-project-mount:
+  &project-mount
+  type: bind
+  source: /tmp
+  target: /tmp
 
 services:
 
   angular:
     image: movement-fitness-frontend:latest
+    volumes:
+      - *project-mount
     container_name: my-movement-fitness-frontend
+    command:
+      - /bin/sh
+      - -c
+      - |
+        msg='############ About to check, if springapi was started successfully.###########'
+        echo -e "$$msg"
+        sleep 5
+        if grep 'Started Main in' /tmp/spring-boot-logger.log; then nginx -g 'daemon off;'; fi
     build:
       context: ../frontend
     networks:
@@ -25,6 +34,8 @@ services:
 
   springapi:
     image: movement-fitness-backend:latest
+    volumes:
+      - *project-mount
     container_name: my-movement-fitness-backend
     build:
       context: ../backend
@@ -79,6 +90,3 @@ networks:
     driver: bridge
   frontend:
     driver: bridge
-
-#volumes:
-#  db-data: {}
